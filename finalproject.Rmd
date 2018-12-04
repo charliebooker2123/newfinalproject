@@ -12,6 +12,10 @@ library(knitr)
 library(fs)
 library(graphics)
 library(readxl)
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
 ```
 
 ```{r}
