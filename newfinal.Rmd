@@ -11,12 +11,15 @@ library(tidyverse)
 library(knitr)
 library(fs)
 library(graphics)
+library(readxl)
 ```
 
 ```{r}
-download.file(url = "https://us.apartmentdata.com/construction/tx-ho.xlsx",
-              destfile = "tx-ho.xlsx",
-              quiet = TRUE,
-              mode = "wb")
+construction <- read_excel("construction.xlsx")
 ```
+
+```{r}
+
+```
+
 
