@@ -26,8 +26,15 @@ construction <- read_excel("construction.xlsx", skip = 1)
 ```
 
 ```{r read-in, echo = FALSE, message = FALSE}
+#chosing the state data map
 states <- map_data("state")
+#selecting texas as the state to use
 texas <- states %>%
+  subset(region == "texas")
+
+#Putting in county lines. First I need all county lines and then I will subset for Texas to get Texas county lines
+counties <- map_data("county")
+tx_county <- counties %>%
   subset(region == "texas")
 
 #looking at texas map
