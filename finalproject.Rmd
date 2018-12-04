@@ -65,7 +65,7 @@ gg2 <- hou_base + theme_nothing() +
   geom_polygon(data = tx_county, fill = NA, color = "white") + geom_polygon(color = "black", fill = NA)
 
 gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1) +
-   geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "yellow", size = .7)
+   geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "yellow", size = .8)
 ```
 
 
