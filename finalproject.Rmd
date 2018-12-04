@@ -20,12 +20,12 @@ library(maps)
 library(mapdata)
 ```
 
-```{r read-in, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE}
 #loading in data
 construction <- read_excel("construction.xlsx", skip = 1)
 ```
 
-```{r read-in, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE}
 #chosing the state data map
 states <- map_data("state")
 #selecting texas as the state to use
@@ -41,7 +41,15 @@ tx_county <- counties %>%
 tx_base <- texas %>%
   ggplot(mapping = aes(x = long, y = lat, group = group)) + coord_fixed(1.3) + geom_polygon(color = "black", fill = "gray")
 
-tx_base + theme_nothing()
+gg1 <- tx_base + theme_nothing() +
+  #putting in county lines
+  geom_polygon(data = tx_county, fill = NA, color = "white") + 
+  geom_polygon(color = "black", fill = NA)
+#this puts the state border on top
+
+
+#plotting the points of new construction on the whole state map
+gg1 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "yellow", size = 1)
 ```
 
 
