@@ -11,6 +11,8 @@ library(maps)
 library(mapdata)
 library(shiny)
 library(shinythemes)
+library(janitor)
+library(kableExtra)
 
 #loading in data
 construction <- read_excel("construction.xlsx", skip = 1)
@@ -75,6 +77,14 @@ submark <- function(st) {
   return(construction$Submarket)
 }
 
+class_df <- read_excel("Market Summary by Class - Houston 201811.xlsx", skip = 1) %>%
+  clean_names()
+
+class1_df <- class_df %>% 
+  select(submarket, class, rental_rate_sf_mo) %>%
+  filter(class %in% c("Class A", "Class B", "Class C", "Class D")) %>%
+  spread(class, rental_rate_sf_mo)
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("superhero"),
    
@@ -95,7 +105,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
       mainPanel(
          tabsetPanel(type = "tabs",
                      tabPanel("Plot", plotOutput("plot1")),
-                     tabPanel("Summary", verbatimTextOutput("summary")) 
+                     tabPanel("Table", plotOutput("table")) 
       )
    ))
 )
@@ -136,8 +146,9 @@ server <- function(input, output) {
        
      })
      
-     output$summary <- renderPrint({
-       h3(textOutput("hello"))
+     output$table <- renderPlot({
+       kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
+         row_spec(2, bold = T)
      })
    }
 
