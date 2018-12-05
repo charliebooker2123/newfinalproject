@@ -118,13 +118,17 @@ server <- function(input, output) {
                  choices = unique(data_available), 
                  selected = unique(data_available)[1])
    })
+
      
      output$plot1 <- renderPlot({
        #input$section %>%
-         input$submarket %>%
-         gg2 + geom_point(aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
-         geom_point(data = construction, aes(x = Longitude, y = Latitude, 
-                                             color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
+         #input$submarket %>%
+       df <- construction %>%
+         filter(Submarket == input$submarket)
+       gg2 +
+         geom_point(data = df,aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
+         geom_point(data = df, aes(x = Longitude, y = Latitude, 
+         color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
        
      })
    }

@@ -79,6 +79,14 @@ gg2 <- hou_base + ditch_the_axes +
 gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
    geom_point(data = construction, aes(x = Longitude, y = Latitude, 
     color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
+
+
+
+#trying something
+gg2 +  geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
+  construction %>%
+   geom_point(aes(x = Longitude, y = Latitude, 
+    color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
 ```
 
 
