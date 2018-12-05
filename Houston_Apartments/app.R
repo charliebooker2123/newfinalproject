@@ -85,6 +85,9 @@ class1_df <- class_df %>%
   filter(class %in% c("Class A", "Class B", "Class C", "Class D")) %>%
   spread(class, rental_rate_sf_mo)
 
+class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
+  row_spec(2, bold = T)
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("superhero"),
    
@@ -105,7 +108,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
       mainPanel(
          tabsetPanel(type = "tabs",
                      tabPanel("Plot", plotOutput("plot1")),
-                     tabPanel("Table", plotOutput("table")) 
+                     tabPanel("Table", htmlOutput("table"))
       )
    ))
 )
@@ -146,11 +149,13 @@ server <- function(input, output) {
        
      })
      
-     output$table <- renderPlot({
-       kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
+     output$table <- renderText({
+       class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
          row_spec(2, bold = T)
      })
+     
    }
+
 
 
 # Run the application 
