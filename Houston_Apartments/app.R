@@ -89,7 +89,7 @@ class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Cl
   row_spec(2, bold = T)
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(theme = shinytheme("superhero"),
+ui <- fluidPage(theme = shinytheme("sandstone"),
    
    # Application title
    titlePanel("Upcoming Houston Apartment Complexes"),
