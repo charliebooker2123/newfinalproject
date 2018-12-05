@@ -113,14 +113,14 @@ server <- function(input, output) {
      
      data_available <- construction[construction$Section == input$section, "Submarket"]
      
-     selectInput(inputID = "submarket", 
+     selectInput(inputId = "submarket", 
                  label = "Submarket",
                  choices = unique(data_available), 
                  selected = unique(data_available)[1])
    })
      
-     output$plot1 = renderPlot({
-       input$section %>%
+     output$plot1 <- renderPlot({
+       #input$section %>%
          input$submarket %>%
          gg2 + geom_point(aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
          geom_point(data = construction, aes(x = Longitude, y = Latitude, 
