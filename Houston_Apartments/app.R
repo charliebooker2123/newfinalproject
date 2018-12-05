@@ -92,7 +92,7 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("distPlot")
+         plotOutput("plot1")
       )
    ))
 
@@ -108,17 +108,27 @@ server <- function(input, output) {
                   selected = "Southwest Houston")
     
    })
-   output$county_selector = renderUI({
-     data_available = construction[construction$Section == input$section, "Submarket"]
+   
+   output$submarket_selector <- renderUI({
+     
+     data_available <- construction[construction$Section == input$section, "Submarket"]
      
      selectInput(inputID = "submarket", 
                  label = "Submarket",
                  choices = unique(data_available), 
                  selected = unique(data_available)[1])
-     
-     ouput$plot1 = renderPlot({})
    })
-}
+     
+     output$plot1 = renderPlot({
+       input$section %>%
+         input$submarket %>%
+         gg2 + geom_point(aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
+         geom_point(data = construction, aes(x = Longitude, y = Latitude, 
+                                             color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
+       
+     })
+   }
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)
