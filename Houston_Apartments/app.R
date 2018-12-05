@@ -137,7 +137,7 @@ server <- function(input, output) {
      })
      
      output$summary <- renderPrint({
-       # hello
+       h3(textOutput("hello"))
      })
    }
 

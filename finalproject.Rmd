@@ -18,6 +18,7 @@ library(ggplot2)
 library(ggmap)
 library(maps)
 library(mapdata)
+library(janitor)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
@@ -89,4 +90,12 @@ gg2 +  geom_point(data = construction, aes(x = Longitude, y = Latitude, group = 
     color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
 ```
 
+```{r}
+class_df <- read_excel("Market Summary by Class - Houston 201811.xlsx", skip = 1) %>%
+  clean_names()
+
+class1_df <- class_df %>% 
+  select(submarket, class, rental_rate_sf_mo) %>%
+  filter(class %in% c("Class A", "Class B", "Class C", "Class D"))
+```
 
