@@ -68,40 +68,55 @@ gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = N
   geom_point(data = construction, aes(x = Longitude, y = Latitude, 
                                       color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
 
+submark <- function(st) {
+  
+  filter(st == construction$State)
+  return(construction$Submarket)
+}
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Old Faithful Geyser Data"),
+   titlePanel("Upcoming Houston Apartment Complexes"),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
+     sidebarPanel(
+       htmlOutput("section_selector"),
+       htmlOutput("submarket_selector")
+       ),
+     
+       
+      
       
       # Show a plot of the generated distribution
       mainPanel(
          plotOutput("distPlot")
       )
-   )
-)
+   ))
+
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
    
-   output$distPlot <- renderPlot({
+   output$section_selector <- renderUI({
       # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+      selectInput(inputId = "section",
+                  label = "Section",
+                  choices = as.character(unique(construction$Section)),
+                  selected = "Southwest Houston")
+    
+   })
+   output$county_selector = renderUI({
+     data_available = construction[construction$Section == input$section, "Submarket"]
+     
+     selectInput(inputID = "submarket", 
+                 label = "Submarket",
+                 choices = unique(data_available), 
+                 selected = unique(data_available)[1])
+     
+     ouput$plot1 = renderPlot({})
    })
 }
 
