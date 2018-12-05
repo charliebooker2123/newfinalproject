@@ -92,9 +92,12 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("plot1")
+         tabsetPanel(type = "tabs",
+                     tabPanel("Plot", plotOutput("plot1")),
+                     tabPanel("Summary", verbatimTextOutput("summary")) 
       )
    ))
+)
 
 
 # Define server logic required to draw a histogram
