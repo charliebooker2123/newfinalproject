@@ -10,6 +10,7 @@ library(ggmap)
 library(maps)
 library(mapdata)
 library(shiny)
+library(shinythemes)
 
 #loading in data
 construction <- read_excel("construction.xlsx", skip = 1)
@@ -75,7 +76,7 @@ submark <- function(st) {
 }
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("superhero"),
    
    # Application title
    titlePanel("Upcoming Houston Apartment Complexes"),
@@ -133,6 +134,10 @@ server <- function(input, output) {
          geom_point(data = df, aes(x = Longitude, y = Latitude, 
          color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
        
+     })
+     
+     output$summary <- renderPrint({
+       # hello
      })
    }
 
