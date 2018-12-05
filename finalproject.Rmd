@@ -26,6 +26,18 @@ construction <- read_excel("construction.xlsx", skip = 1)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
+#This theme will get rid of the gridlines but keep the legend
+ditch_the_axes <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank()
+  )
+
+
+
 #chosing the state data map
 states <- map_data("state")
 #selecting texas as the state to use
@@ -61,11 +73,12 @@ hou_base <- tx_county %>%
   coord_fixed(1.3) + geom_polygon(color = "black", fill = "gray")
 
 #repeating steps from earlier but Houston counties instead of whole state of Texas. Trying to get Houston plot continued
-gg2 <- hou_base + theme_nothing() + 
+gg2 <- hou_base + ditch_the_axes + 
   geom_polygon(data = tx_county, fill = NA, color = "white") + geom_polygon(color = "black", fill = NA)
 
-gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1) +
-   geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "yellow", size = .8)
+gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
+   geom_point(data = construction, aes(x = Longitude, y = Latitude, 
+    color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
 ```
 
 
