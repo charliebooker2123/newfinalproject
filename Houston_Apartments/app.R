@@ -143,11 +143,12 @@ server <- function(input, output) {
        df <- construction %>%
          filter(Submarket == input$submarket)
        gg2 +
-         geom_point(data = df,aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
+         geom_point(data = df,aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 3, alpha = .5) +
          geom_point(data = df, aes(x = Longitude, y = Latitude, 
-         color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
+         color = Category, group = NA), size = 2, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow")) + 
+         theme(legend.text = element_text(size = 20)) + theme(legend.title = element_text(size = 23, face = "bold"))
        
-     })
+     }, height = 600, width = 800)
      
      output$table <- renderText({
        class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
