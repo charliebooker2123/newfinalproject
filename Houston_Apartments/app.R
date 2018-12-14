@@ -13,6 +13,9 @@ library(shiny)
 library(shinythemes)
 library(janitor)
 library(kableExtra)
+library(plyr)
+library(dplyr)
+
 
 #loading in data
 construction <- read_excel("construction.xlsx", skip = 1)
@@ -85,8 +88,132 @@ class1_df <- class_df %>%
   filter(class %in% c("Class A", "Class B", "Class C", "Class D")) %>%
   spread(class, rental_rate_sf_mo)
 
+class1_df <- rename(class1_df, c("submarket" = "Submarket"))
+
 class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
   row_spec(2, bold = T)
+
+construction_merge <- construction %>%
+  select(Submarket, Section)
+
+class_complete <- left_join(class1_df, construction_merge, by = "Submarket")
+
+#putting in sections for those with NA
+working_class <- class_complete %>%
+  filter(!Section %in% c("Northwest Houston", "Northeast Houston", "Southwest Houston", "Southeast Houston", "Central Houston"))
+
+class1_df <- class1_df %>%
+  mutate(Section = case_when(Submarket %in% c("Sharpstown/ Westwood", "Woodlake/ Westheimer", "Westpark/ Bissonnet", "Westchase", "Braeswood/ Fondren SW", "Almeda/ South Main", "Galleria/ Uptown", "Energy Corridor/ CityCentre/ Briar Forest", "Alief", "Sugar Land/ Stafford/ Sienna", "Richmond/ Rosenberg" ) ~
+                               "Southwest Houston",
+                             
+                             Submarket %in% c("Alvin/ Angleton/ Lake Jackson", "Hwy 288 South/ Pearland West", "U of H/ I-45 South", "Beltway 8 / I-45 South", "Pasadena/ Deer Park/ La Porte", "Friendswood/ Pearland East", "Clear Lake/ Webster/ League City", "Baytown", "Dickinson/ Galveston") ~
+                               "Southeast Houston",
+                             
+                             Submarket %in% c("Montrose/ Museum/ Midtown", "Highland Village/ Upper Kirby/ West U", "Med Center/ Braes Bayou", "Heights/ Washington Ave", "Downtown") ~ "Central Houston",
+                             
+                             Submarket %in% c("Inwood/ Hwy 249", "Brookhollow/ Northwest Crossing", "Memorial/ Spring Branch", "Willowbrook/ Champions/ Ella", "Jersey Village/ Cypress", "Bear Creek/ Copperfield/ Fairfield", "Katy/ Cinco Ranch/ Waterside", "Tomball/ Spring", "Woodlands/ Conroe South", "Conroe North/ Montgomery") ~ 
+                               "Northwest Houston",
+                             
+                             Submarket %in% c("Northeast Houston/ Crosby", "Greenspoint/ Northborough/ Aldine", "FM 1960 East/ IAH Airport", "I-10 East/ Woodforest/ Channelview", "I-69 North", "Northline", "Lake Houston/ Kingwood") ~ 
+                               "Northeast Houston",
+                             TRUE ~ "NA"))
+
+#class1_df[is.na(class1_df)] <- 0
+
+averaging_number <- class1_df %>%
+  group_by(Section) %>%
+  tally()
+
+detach(package:plyr)
+
+averaging <- class1_df %>%
+  select(`Class A`, `Class B`, `Class C`, `Class D`, Section, Submarket) %>%
+  group_by(Section) %>%
+  arrange(Section) %>%
+  group_by(Section) %>%
+  summarise("Class A" = mean(`Class A`, na.rm = TRUE),
+            "Class B" = mean(`Class B`, na.rm = TRUE),
+            "Class C" = mean(`Class C`, na.rm = TRUE),
+            "Class D" = mean(`Class D`, na.rm = TRUE)) %>%
+  filter(!Section %in% "NA") 
+
+library(plyr)
+averaging <- rename(averaging, c("Section" = "Submarket"))
+detach(package:plyr)
+
+#preparing Northwest Houston
+nw_averaging <- averaging %>%
+  filter(Submarket == "Northwest Houston")
+nw_class <- class1_df %>%
+  filter(Section == "Northwest Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+nw <- rbind(nw_averaging, nw_class)
+
+#preparing Northeast Houston
+ne_averaging <- averaging %>%
+  filter(Submarket == "Northeast Houston")
+ne_class <- class1_df %>%
+  filter(Section == "Northeast Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northeast
+ne <- rbind(ne_averaging, ne_class)
+
+#preparing Southwest Houston
+sw_averaging <- averaging %>%
+  filter(Submarket == "Southwest Houston")
+sw_class <- class1_df %>%
+  filter(Section == "Southwest Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding southwest
+sw <- rbind(sw_averaging, sw_class)
+
+#preparing Southeast Houston
+se_averaging <- averaging %>%
+  filter(Submarket == "Southeast Houston")
+se_class <- class1_df %>%
+  filter(Section == "Southeast Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+se <- rbind(se_averaging, se_class)
+
+#preparing Central Houston
+ce_averaging <- averaging %>%
+  filter(Submarket == "Central Houston")
+ce_class <- class1_df %>%
+  filter(Section == "Central Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+ce <- rbind(ce_averaging, ce_class)
+
+#preparing all markets
+all <- class1_df %>%
+  filter(Submarket == "All") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+
+#making full table for kable
+full_table <- rbind(all, sw, nw, ce, ne, se)
+#setting 0 equal to NA
+full_table[full_table == 0] <- NA
+
+
+#making kable
+finished_table <- kable(full_table, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Total Houston Market Average", 1, 1) %>%
+  group_rows("Southwest Houston", 2, 13) %>%
+  group_rows("Northwest Houston", 14, 24) %>%
+  group_rows("Central Houston", 25, 30) %>%
+  group_rows("Northeast Houston", 31, 38) %>%
+  group_rows("Southeast Houston", 39, 48) %>%
+  row_spec(1, bold = T) %>%
+  row_spec(2, bold = T) %>%
+  row_spec(14, bold = T) %>%
+  row_spec(25, bold = T) %>%
+  row_spec(31, bold = T) %>%
+  row_spec(39, bold = T)
+
+
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("sandstone"),
@@ -151,8 +278,20 @@ server <- function(input, output) {
      }, height = 600, width = 800)
      
      output$table <- renderText({
-       class_table <- kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
-         row_spec(2, bold = T)
+       kable(full_table, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+         kable_styling(full_width = F) %>%
+         group_rows("Total Houston Market Average", 1, 1) %>%
+         group_rows("Southwest Houston", 2, 13) %>%
+         group_rows("Northwest Houston", 14, 24) %>%
+         group_rows("Central Houston", 25, 30) %>%
+         group_rows("Northeast Houston", 31, 38) %>%
+         group_rows("Southeast Houston", 39, 48) %>%
+         row_spec(1, bold = T) %>%
+         row_spec(2, bold = T) %>%
+         row_spec(14, bold = T) %>%
+         row_spec(25, bold = T) %>%
+         row_spec(31, bold = T) %>%
+         row_spec(39, bold = T)
      })
      
    }
