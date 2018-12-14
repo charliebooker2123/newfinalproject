@@ -154,9 +154,66 @@ averaging <- class1_df %>%
             "Class B" = mean(`Class B`),
             "Class C" = mean(`Class C`),
             "Class D" = mean(`Class D`)) %>%
-  filter(!Section %in% "NA")
+  filter(!Section %in% "NA") 
  
+library(plyr)
+averaging <- rename(averaging, c("Section" = "Submarket"))
+detach(package:plyr)
 
+#preparing Northwest Houston
+nw_averaging <- averaging %>%
+  filter(Submarket == "Northwest Houston")
+nw_class <- class1_df %>%
+  filter(Section == "Northwest Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+nw <- rbind(nw_averaging, nw_class)
+
+#preparing Northeast Houston
+ne_averaging <- averaging %>%
+  filter(Submarket == "Northeast Houston")
+ne_class <- class1_df %>%
+  filter(Section == "Northeast Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northeast
+ne <- rbind(ne_averaging, ne_class)
+
+#preparing Southwest Houston
+sw_averaging <- averaging %>%
+  filter(Submarket == "Southwest Houston")
+sw_class <- class1_df %>%
+  filter(Section == "Southwest Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding southwest
+sw <- rbind(sw_averaging, sw_class)
+
+#preparing Southeast Houston
+se_averaging <- averaging %>%
+  filter(Submarket == "Southeast Houston")
+se_class <- class1_df %>%
+  filter(Section == "Southeast Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+se <- rbind(se_averaging, se_class)
+
+#preparing Central Houston
+ce_averaging <- averaging %>%
+  filter(Submarket == "Central Houston")
+ce_class <- class1_df %>%
+  filter(Section == "Central Houston") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+#binding northwest
+ce <- rbind(ce_averaging, ce_class)
+
+#preparing all markets
+all <- class1_df %>%
+  filter(Submarket == "All") %>%
+  select(Submarket, `Class A`, `Class B`, `Class C`, `Class D`)
+
+#making full table for kable
+full_table <- rbind(all, sw, nw, ce, ne, se)
+#setting 0 equal to NA
+full_table[full_table == 0] <- NA
 ```
 
 
