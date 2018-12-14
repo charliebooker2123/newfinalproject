@@ -1,0 +1,12 @@
+name: Houston_Apartments
+title: Houston_Apartments
+username:
+account: cbooker
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 604803
+bundleId: 1742342
+url: https://cbooker.shinyapps.io/Houston_Apartments/
+when: 1544011474.10663
+asMultiple: FALSE
+asStatic: FALSE
