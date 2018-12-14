@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(plyr)
 library(knitr)
 library(fs)
 library(graphics)
@@ -20,6 +21,7 @@ library(maps)
 library(mapdata)
 library(janitor)
 library(kableExtra)
+library(dplyr)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
@@ -75,12 +77,15 @@ hou_base <- tx_county %>%
   coord_fixed(1.3) + geom_polygon(color = "black", fill = "gray")
 
 #repeating steps from earlier but Houston counties instead of whole state of Texas. Trying to get Houston plot continued
-gg2 <- hou_base + ditch_the_axes + 
+gg2 <- hou_base + #ditch_the_axes + 
   geom_polygon(data = tx_county, fill = NA, color = "white") + geom_polygon(color = "black", fill = NA)
 
 gg2 + geom_point(data = construction, aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 1, alpha = .5) +
    geom_point(data = construction, aes(x = Longitude, y = Latitude, 
-    color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow"))
+    color = Category, group = NA), size = .8, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow")) + 
+  theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold"))
+
+
 
 
 
@@ -95,7 +100,64 @@ class1_df <- class_df %>%
   filter(class %in% c("Class A", "Class B", "Class C", "Class D")) %>%
   spread(class, rental_rate_sf_mo)
 
+class1_df <- rename(class1_df, c("submarket" = "Submarket"))
+
 kable(class1_df, caption = "Square Foot Monthly Rental Rate by Class") %>% kable_styling(full_width = F) %>%
   row_spec(2, bold = T)
 ```
+
+
+```{r}
+#getting ready to perfect the class table
+construction_merge <- construction %>%
+  select(Submarket, Section)
+
+class_complete <- left_join(class1_df, construction_merge, by = "Submarket")
+
+#putting in sections for those with NA
+working_class <- class_complete %>%
+  filter(!Section %in% c("Northwest Houston", "Northeast Houston", "Southwest Houston", "Southeast Houston", "Central Houston"))
+
+class1_df <- class1_df %>%
+  mutate(Section = case_when(Submarket %in% c("Sharpstown/ Westwood", "Woodlake/ Westheimer", "Westpark/ Bissonnet", "Westchase", "Braeswood/ Fondren SW", "Almeda/ South Main", "Galleria/ Uptown", "Energy Corridor/ CityCentre/ Briar Forest", "Alief", "Sugar Land/ Stafford/ Sienna", "Richmond/ Rosenberg" ) ~
+                               "Southwest Houston",
+                             
+                             Submarket %in% c("Alvin/ Angleton/ Lake Jackson", "Hwy 288 South/ Pearland West", "U of H/ I-45 South", "Beltway 8 / I-45 South", "Pasadena/ Deer Park/ La Porte", "Friendswood/ Pearland East", "Clear Lake/ Webster/ League City", "Baytown", "Dickinson/ Galveston") ~
+                               "Southeast Houston",
+                             
+                             Submarket %in% c("Montrose/ Museum/ Midtown", "Highland Village/ Upper Kirby/ West U", "Med Center/ Braes Bayou", "Heights/ Washington Ave", "Downtown") ~ "Central Houston",
+                     
+                             Submarket %in% c("Inwood/ Hwy 249", "Brookhollow/ Northwest Crossing", "Memorial/ Spring Branch", "Willowbrook/ Champions/ Ella", "Jersey Village/ Cypress", "Bear Creek/ Copperfield/ Fairfield", "Katy/ Cinco Ranch/ Waterside", "Tomball/ Spring", "Woodlands/ Conroe South", "Conroe North/ Montgomery") ~ 
+                               "Northwest Houston",
+                             
+                             Submarket %in% c("Northeast Houston/ Crosby", "Greenspoint/ Northborough/ Aldine", "FM 1960 East/ IAH Airport", "I-10 East/ Woodforest/ Channelview", "I-69 North", "Northline", "Lake Houston/ Kingwood") ~ 
+                               "Northeast Houston",
+                             TRUE ~ "NA"))
+
+class1_df[is.na(class1_df)] <- 0
+```
+
+
+```{r}
+averaging_number <- class1_df %>%
+  group_by(Section) %>%
+  tally()
+
+detach(package:plyr)
+
+averaging <- class1_df %>%
+  select(`Class A`, `Class B`, `Class C`, `Class D`, Section, Submarket) %>%
+  group_by(Section) %>%
+  arrange(Section) %>%
+  group_by(Section) %>%
+  summarise("Class A" = mean(`Class A`),
+            "Class B" = mean(`Class B`),
+            "Class C" = mean(`Class C`),
+            "Class D" = mean(`Class D`)) %>%
+  filter(!Section %in% "NA")
+ 
+
+```
+
+
 
