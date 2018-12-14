@@ -234,6 +234,8 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
       # Show a plot of the generated distribution
       mainPanel(
          tabsetPanel(type = "tabs",
+                     tabPanel("Summary",verbatimTextOutput("summary"), h1("Plot"),
+                              p("The data used was acquired from ApartmentData.com. The map shows the 7 counties that make up the city of Houston, Texas (Harris, Galveston, Brazoria, Fort Bend, Waller, Montgomery, and Chambers County). The Houston Apartment Market is split up into 5 different Sections (Northwest, Northeast, Southeast, Southwest, and Central Houston). These sections are split up into even further sections called \"Submarkets\". This shiny app will allow you to navigate through different Sections and Submarkets of Houston. The points plotted out will give you information about the Upcoming Apartment Market in Houston. Red markers represent \"Proposed\" apartment sites. These sites have signed a contractual agreement to build at the designated area, but have yet to break ground and start construction. Blue markers represent \"Recently Opened\" apartment sites. These apartment sites have opened up and have began renting out units to tenants in the last 2 months. Yellow markers represent apartment sites that are currently \"Under Construction\" and have yet to be completed. Some of these sites are renting out units to tenants during construction, but have yet to do a Grand Opening for the Apartment Complex.")),
                      tabPanel("Plot", plotOutput("plot1")),
                      tabPanel("Table", htmlOutput("table"))
       )
@@ -263,6 +265,10 @@ server <- function(input, output) {
                  selected = unique(data_available)[1])
    })
 
+   
+   output$summary <- renderPrint({
+   text = "hey there"
+   })
      
      output$plot1 <- renderPlot({
        #input$section %>%
