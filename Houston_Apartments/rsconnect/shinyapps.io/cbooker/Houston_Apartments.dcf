@@ -5,8 +5,8 @@ account: cbooker
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 604803
-bundleId: 1742342
+bundleId: 1763663
 url: https://cbooker.shinyapps.io/Houston_Apartments/
-when: 1544011474.10663
+when: 1544807967.30381
 asMultiple: FALSE
 asStatic: FALSE

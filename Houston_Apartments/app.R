@@ -213,7 +213,26 @@ finished_table <- kable(full_table, caption = "Monthly Rental Rate per Square Fo
   row_spec(31, bold = T) %>%
   row_spec(39, bold = T)
 
+if(!requireNamespace("devtools")) install.packages("devtools")
+devtools::install_github("dkahle/ggmap", ref = "tidyup")
 
+ggmap::register_google(key = "AIzaSyDOt3F5FU_4XtBOLLnOXpB2B9O7iXxtA5Q")
+
+mylocation <- c(lat = 29.749263, long =  -95.401658)
+
+
+mymap <- get_map(location = mylocation,
+                 source = "google",
+                 maptype = "roadmap",
+                 zoom = 9,
+                 color = "color")
+
+
+HouMap <- ggmap(mymap)
+
+HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude, 
+                                             color = Category, group = NA), size = .8, alpha = .7) + scale_color_manual(values = c("red", "blue", "deepskyblue")) + 
+  theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("sandstone"),
@@ -277,11 +296,9 @@ server <- function(input, output) {
          #input$submarket %>%
        df <- construction %>%
          filter(Submarket == input$submarket)
-       gg2 +
-         geom_point(data = df,aes(x = Longitude, y = Latitude, group = NA), color = "black", size = 3, alpha = .5) +
-         geom_point(data = df, aes(x = Longitude, y = Latitude, 
-         color = Category, group = NA), size = 2, alpha = .5) + scale_color_manual(values = c("red", "blue", "yellow")) + 
-         theme(legend.text = element_text(size = 20)) + theme(legend.title = element_text(size = 23, face = "bold"))
+       HouMap + geom_point(data = df, aes(x = Longitude, y = Latitude, 
+                                                    color = Category, group = NA), size = 2.5, alpha = .7) + scale_color_manual(values = c("red", "blue", "deepskyblue")) + 
+         theme(legend.text = element_text(size = 20)) + theme(legend.title = element_text(size = 23, face = "bold")) + ditch_the_axes
        
      }, height = 600, width = 800)
      

@@ -22,6 +22,7 @@ library(mapdata)
 library(janitor)
 library(kableExtra)
 library(dplyr)
+library(mapproj)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
@@ -235,5 +236,27 @@ kable(full_table, caption = "Monthly Rental Rate per Square Foot by Apartment Cl
 
 ```
 
+```{r, message = FALSE, echo = FALSE}
+if(!requireNamespace("devtools")) install.packages("devtools")
+devtools::install_github("dkahle/ggmap", ref = "tidyup")
+
+ggmap::register_google(key = "AIzaSyDOt3F5FU_4XtBOLLnOXpB2B9O7iXxtA5Q")
+
+mylocation <- c(lat = 29.749263, long =  -95.401658)
+
+
+mymap <- get_map(location = mylocation,
+                 source = "google",
+                        maptype = "roadmap",
+                        zoom = 9,
+                 color = "color")
+
+
+HouMap <- ggmap(mymap)
+
+HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude, 
+    color = Category, group = NA), size = .8, alpha = .7) + scale_color_manual(values = c("red", "blue", "deepskyblue")) + 
+  theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
+```
 
 
