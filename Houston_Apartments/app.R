@@ -235,7 +235,7 @@ HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude,
   theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(theme = shinytheme("sandstone"),
+ui <- fluidPage(theme = shinytheme("cyborg"),
    
    # Application title
    titlePanel("Upcoming Houston Apartment Complexes"),

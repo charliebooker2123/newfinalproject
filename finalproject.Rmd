@@ -233,6 +233,13 @@ kable(full_table, caption = "Monthly Rental Rate per Square Foot by Apartment Cl
   row_spec(31, bold = T) %>%
   row_spec(39, bold = T)
 
+#making kables for each Section of Houston
+#central Houston
+ce_kable <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Central Houston", 1,6) %>%
+  row_spec(1, bold = T)
+
 
 ```
 
