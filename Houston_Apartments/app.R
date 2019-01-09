@@ -250,13 +250,15 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
    titlePanel("Upcoming Houston Apartment Complexes"),
    
    # Sidebar with a slider input for number of bins 
-   sidebarLayout(
+   column(12,
      sidebarPanel(
        htmlOutput("section_selector"),
-       htmlOutput("submarket_selector")
+       htmlOutput("submarket_selector"),
+       hr(),
+       h5("hello")
        ),
      
-       
+       #table dimensions may be too big for sidebar
       
       
       # Show a plot of the generated distribution
