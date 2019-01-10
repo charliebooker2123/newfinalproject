@@ -215,35 +215,35 @@ finished_table <- kable(full_table, caption = "Monthly Rental Rate per Square Fo
 
 #making kables for each Section of Houston
 #central Houston
-ce_kable <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+Central_Houston_kable <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Central Houston", 1,6) %>%
   row_spec(1, bold = T)
 
 
 #northeast houston
-ne_kable <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
+Northeast_Houston_kable <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Northeast Houston", 1,8) %>%
   row_spec(1, bold = T)
 
 #northwest houston
-nw_kable <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+Northwest_Houston_kable <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Northwest Houston", 1,11) %>%
   row_spec(1, bold = T)
 
 # southeast houston
-se_kable <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+Southeast_Houston_kable <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Southeast Houston", 1,10) %>%
   row_spec(1, bold = T)
 
 #southwest houston
-sw_kable <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+Southwest_Houston_kable <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Southwest Houston", 1,12) %>%
@@ -270,6 +270,9 @@ HouMap <- ggmap(mymap)
 HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude, 
                                              color = Category, group = NA), size = .8, alpha = .7) + scale_color_manual(values = c("red", "blue", "deepskyblue")) + 
   theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
+
+
+library(dplyr)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("cyborg"),
@@ -298,7 +301,7 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
                               h1("Table"), 
                               p("The table also uses data acquired from ApartmentData.com. The table shows the monthly rental rate per square foot across all markets and submarkets for different classes of apartments. Apartment Complexes are given a class ranking ranging from \"A\" through \"D\". Apartments with a \"Class A\" ranking are relatively luxurious and newly built. \"Class D\" apartments represent the opposite side of the spectrum and are the least luxurious and are more poorly put together. An average monthly rental rate per square foot in dollar amount is given for the entire Houston market, represented by the \"All\" row. From there, the average monthly rental rate per square foot is given in dollar amounts for each Section of Houston followed by the Subsections that make up that Section. Some of the lower income Subsections don't contain higher classed apartment complexes, just as some higher income Subsections don't contain lower classed apartment complexes." )),
                      tabPanel("Plot", column(8, plotOutput("plot1")),
-                              column(4, tableOutput("cek"))),
+                              column(4, tableOutput("market"))),
                      tabPanel("Table", htmlOutput("table"))
       )
    ))
@@ -361,7 +364,11 @@ server <- function(input, output) {
          row_spec(39, bold = T)
      })
      
-     output$cek <- renderText({
+     #Probably need to use function and return at the end
+     output$market <- renderText({
+       #function(x)
+       #if(table == input$section)
+       #filter(table == input$section)
        kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
          kable_styling(full_width = F) %>%
          group_rows("Central Houston", 1,6) %>%

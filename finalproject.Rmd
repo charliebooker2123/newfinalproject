@@ -292,5 +292,8 @@ HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude,
     color = Category, group = NA), size = .8, alpha = .7) + scale_color_manual(values = c("red", "blue", "deepskyblue")) + 
   theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
 ```
+```{r}
+return(nw_kable)
+```
 
 
