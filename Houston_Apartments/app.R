@@ -221,6 +221,34 @@ ce_kable <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartmen
   row_spec(1, bold = T)
 
 
+#northeast houston
+ne_kable <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
+                  digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Northeast Houston", 1,8) %>%
+  row_spec(1, bold = T)
+
+#northwest houston
+nw_kable <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                  digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Northwest Houston", 1,11) %>%
+  row_spec(1, bold = T)
+
+# southeast houston
+se_kable <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                  digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Southeast Houston", 1,10) %>%
+  row_spec(1, bold = T)
+
+#southwest houston
+sw_kable <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                  digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Southwest Houston", 1,12) %>%
+  row_spec(1, bold = T)
+
 
 if(!requireNamespace("devtools")) install.packages("devtools")
 devtools::install_github("dkahle/ggmap", ref = "tidyup")
