@@ -293,7 +293,24 @@ HouMap + geom_point(data = construction, aes(x = Longitude, y = Latitude,
   theme(legend.text = element_text(size = 12)) + theme(legend.title = element_text(size = 15, face = "bold")) + ditch_the_axes
 ```
 ```{r}
-return(nw_kable)
+
+#this is how I will produce market table
+#maybe an if statement. if sec == the name then return the table
+body <- function(sec) {
+  if(sec == 0) {
+    result <- (kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+  kable_styling(full_width = F) %>%
+  group_rows("Central Houston", 1,6) %>%
+  row_spec(1, bold = T))}
+  
+  else {
+    result <- "hi"
+    
+  }
+  return(result) 
+}
+  
+
 ```
 
 

@@ -215,35 +215,35 @@ finished_table <- kable(full_table, caption = "Monthly Rental Rate per Square Fo
 
 #making kables for each Section of Houston
 #central Houston
-Central_Houston_kable <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+'Central Houston' <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Central Houston", 1,6) %>%
   row_spec(1, bold = T)
 
 
 #northeast houston
-Northeast_Houston_kable <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
+'Northeast Houston' <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Northeast Houston", 1,8) %>%
   row_spec(1, bold = T)
 
 #northwest houston
-Northwest_Houston_kable <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+'Northwest Houston' <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Northwest Houston", 1,11) %>%
   row_spec(1, bold = T)
 
 # southeast houston
-Southeast_Houston_kable <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+'Southeast Houston' <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Southeast Houston", 1,10) %>%
   row_spec(1, bold = T)
 
 #southwest houston
-Southwest_Houston_kable <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+'Southwest Houston' <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
                   digits = round(3)) %>%
   kable_styling(full_width = F) %>%
   group_rows("Southwest Houston", 1,12) %>%
@@ -366,6 +366,9 @@ server <- function(input, output) {
      
      #Probably need to use function and return at the end
      output$market <- renderText({
+       money <- function {
+         
+       if (input$section == 'Central Houston' )
        #function(x)
        #if(table == input$section)
        #filter(table == input$section)
@@ -373,6 +376,7 @@ server <- function(input, output) {
          kable_styling(full_width = F) %>%
          group_rows("Central Houston", 1,6) %>%
          row_spec(1, bold = T)
+       }
      })
      
    }
