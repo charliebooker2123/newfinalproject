@@ -364,21 +364,18 @@ server <- function(input, output) {
          row_spec(39, bold = T)
      })
      
-     #Probably need to use function and return at the end
      
-     #might have to put function before the renderText and output
-     output$market <- renderText({
-       hmark <- function(hi) {
-         
-         input$section <- renderText({ans()})
-         
-         x <- input$section
-         
+     hmark <- function(x) {
+       
+       #input$section <- renderText({ans()})
+       
+       #x <- input$section
+       
        if(x == 'Central Houston') {
          result <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
-                      kable_styling(full_width = F) %>%
-                      group_rows("Central Houston", 1,6) %>%
-                      row_spec(1, bold = T)}
+           kable_styling(full_width = F) %>%
+           group_rows("Central Houston", 1,6) %>%
+           row_spec(1, bold = T)}
        
        else if (x == 'Northeast Houston') {
          result <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
@@ -386,32 +383,85 @@ server <- function(input, output) {
            kable_styling(full_width = F) %>%
            group_rows("Northeast Houston", 1,8) %>%
            row_spec(1, bold = T)}
-         
-         else if (x == 'Northwest Houston') {
-           result <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
-                           digits = round(3)) %>%
-             kable_styling(full_width = F) %>%
-             group_rows("Northwest Houston", 1,11) %>%
-             row_spec(1, bold = T)}
-         
-         else if (x == 'Southeast Houston') {
-           result <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
-                             digits = round(3)) %>%
-             kable_styling(full_width = F) %>%
-             group_rows("Southeast Houston", 1,10) %>%
-             row_spec(1, bold = T)}
-         
-         else if (x == 'Southwest Houston') {
-           result <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
-                 digits = round(3)) %>%
-             kable_styling(full_width = F) %>%
-             group_rows("Southwest Houston", 1,12) %>%
-             row_spec(1, bold = T)
-         }
-         
-         return(result)
-         
+       
+       else if (x == 'Northwest Houston') {
+         result <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                         digits = round(3)) %>%
+           kable_styling(full_width = F) %>%
+           group_rows("Northwest Houston", 1,11) %>%
+           row_spec(1, bold = T)}
+       
+       else if (x == 'Southeast Houston') {
+         result <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                         digits = round(3)) %>%
+           kable_styling(full_width = F) %>%
+           group_rows("Southeast Houston", 1,10) %>%
+           row_spec(1, bold = T)}
+       
+       else if (x == 'Southwest Houston') {
+         result <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+                         digits = round(3)) %>%
+           kable_styling(full_width = F) %>%
+           group_rows("Southwest Houston", 1,12) %>%
+           row_spec(1, bold = T)
        }
+       
+       return(result)
+       
+     }
+     
+     
+     
+     
+     #Probably need to use function and return at the end
+     
+     #might have to put function before the renderText and output
+     output$market <- renderText(
+       {hmark(input$section)
+       # hmark <- function(x) {
+       #   
+       #   #input$section <- renderText({ans()})
+       #   
+       #   #x <- input$section
+       #   
+       # if(x == 'Central Houston') {
+       #   result <- kable(ce, caption = "Monthly Rental Rate per Square Foot by Apartment Class", digits = round(3)) %>%
+       #                kable_styling(full_width = F) %>%
+       #                group_rows("Central Houston", 1,6) %>%
+       #                row_spec(1, bold = T)}
+       # 
+       # else if (x == 'Northeast Houston') {
+       #   result <- kable(ne, caption = "Monthly Rental Rate per Square Foot by Apartment Class", 
+       #                   digits = round(3)) %>%
+       #     kable_styling(full_width = F) %>%
+       #     group_rows("Northeast Houston", 1,8) %>%
+       #     row_spec(1, bold = T)}
+       #   
+       #   else if (x == 'Northwest Houston') {
+       #     result <- kable(nw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+       #                     digits = round(3)) %>%
+       #       kable_styling(full_width = F) %>%
+       #       group_rows("Northwest Houston", 1,11) %>%
+       #       row_spec(1, bold = T)}
+       #   
+       #   else if (x == 'Southeast Houston') {
+       #     result <- kable(se, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+       #                       digits = round(3)) %>%
+       #       kable_styling(full_width = F) %>%
+       #       group_rows("Southeast Houston", 1,10) %>%
+       #       row_spec(1, bold = T)}
+       #   
+       #   else if (x == 'Southwest Houston') {
+       #     result <- kable(sw, caption = "Monthly Rental Rate per Square Foot by Apartment Class",
+       #           digits = round(3)) %>%
+       #       kable_styling(full_width = F) %>%
+       #       group_rows("Southwest Houston", 1,12) %>%
+       #       row_spec(1, bold = T)
+       #   }
+       #   
+       #   return(result)
+       #   
+       # }
          
       
      })
