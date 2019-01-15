@@ -278,7 +278,7 @@ library(dplyr)
 ui <- fluidPage(theme = shinytheme("cyborg"),
    
    # Application title
-   titlePanel("Upcoming Houston Apartment Complexes"),
+   titlePanel("Upcoming Houston Apartment Communities"),
    
    # Sidebar with a slider input for number of bins 
    column(12,
@@ -296,13 +296,15 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
       # Show a plot of the generated distribution
       column(12,
          tabsetPanel(type = "tabs",
-                     tabPanel("Summary",verbatimTextOutput("summary"), h1("Plot"),
-                              p("The data used was acquired from ApartmentData.com. The map shows the 7 counties that make up the city of Houston, Texas (Harris, Galveston, Brazoria, Fort Bend, Waller, Montgomery, and Chambers County). The Houston Apartment Market is split up into 5 different Sections (Northwest, Northeast, Southeast, Southwest, and Central Houston). These sections are split up into even further sections called \"Submarkets\". This shiny app will allow you to navigate through different Sections and Submarkets of Houston. The points plotted out will give you information about the Upcoming Apartment Market in Houston. Red markers represent \"Proposed\" apartment sites. These sites have signed a contractual agreement to build at the designated area, but have yet to break ground and start construction. Blue markers represent \"Recently Opened\" apartment sites. These apartment sites have opened up and have began renting out units to tenants in the last 2 months. Yellow markers represent apartment sites that are currently \"Under Construction\" and have yet to be completed. Some of these sites are renting out units to tenants during construction, but have yet to do a Grand Opening for the Apartment Complex."),
-                              h1("Table"), 
-                              p("The table also uses data acquired from ApartmentData.com. The table shows the monthly rental rate per square foot across all markets and submarkets for different classes of apartments. Apartment Complexes are given a class ranking ranging from \"A\" through \"D\". Apartments with a \"Class A\" ranking are relatively luxurious and newly built. \"Class D\" apartments represent the opposite side of the spectrum and are the least luxurious and are more poorly put together. An average monthly rental rate per square foot in dollar amount is given for the entire Houston market, represented by the \"All\" row. From there, the average monthly rental rate per square foot is given in dollar amounts for each Section of Houston followed by the Subsections that make up that Section. Some of the lower income Subsections don't contain higher classed apartment complexes, just as some higher income Subsections don't contain lower classed apartment complexes." )),
-                     tabPanel("Plot", column(8, plotOutput("plot1")),
+                     tabPanel("Summary",verbatimTextOutput("summary"), h1("Market Map"),
+                              p("The data used was acquired from ApartmentData.com. The map shows a road map of the city of Houston, Texas. The Houston Apartment Market is split up into 5 different Sections (Northwest, Northeast, Southeast, Southwest, and Central Houston). These sections are split up into even further sections called \"Submarkets\". This Shiny App will allow you to navigate through different Sections and Submarkets of Houston. The points plotted out will give you information about the Upcoming Apartment Market in Houston. Red markers represent \"Proposed\" apartment sites. These sites have signed a contractual agreement to build at the designated area, but have yet to break ground and start construction. Purple markers represent \"Recently Opened\" apartment sites. These apartment sites have opened up and have began renting out units to tenants in the last 2 months. Light Blue markers represent apartment sites that are currently \"Under Construction\" and have yet to be completed. Some of these sites are preleasing out units to tenants during construction, but have yet to do a Grand Opening for the Apartment Community."),
+                              h5("Section Market Class Table"),
+                              p("While navigating through different Sections and Submarkets, a market table will appear to the right depending on the selected Section. The table shows the average monthly rental rate per square foot across the Submarkets of the selected Section. Apartment Communities are given a class ranking ranging from \"A\" through \"D\". Apartment communities with a \"Class A\" ranking are relatively luxurious and newly built. \"Class D\" apartment communities represent the opposite side of the spectrum. They are relatively older and more necessity based. The average monthly rental rate per square foot in dollar amount is given for the entire Section, which is bolded, and then followed by the average monthly rental rate per square foot for each Submarket. Some of the lower income Submarkets don't contain higher class apartment communities, just as higher income Submarkets may not contain lower class apartment communities."),
+                              h1("Full Market Table"), 
+                              p("The Full Market Table will show a compiled table of the average monthly rental rate per square foot in dollar amount across all Sections and Submarkets through each apartment class. An average monthly rental rate per square foot in dollar amount is given for the entire Houston market, represented by the \"All\" row.")),
+                     tabPanel("Market Map", column(8, plotOutput("plot1")),
                               column(4, tableOutput("market"))),
-                     tabPanel("Table", htmlOutput("table"))
+                     tabPanel("Full Market Table", htmlOutput("table"))
       )
    ))
 
